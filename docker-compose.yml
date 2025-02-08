@@ -1,0 +1,21 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3004:3004"  # Map backend port 3004 to host
+    volumes:
+      - ./backend:/app  # Mount local backend directory to container
+    environment:
+      - PYTHONUNBUFFERED=1  # Ensure output isn't buffered (important for logging)
+  
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"  # Map frontend port 3000 to host
+    volumes:
+      - ./frontend:/app  # Mount local frontend directory to container
+      - /app/node_modules  # Prevent issues with node_modules in container
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # For hot-reloading in Docker
+    depends_on:
+      - backend  # Ensure backend starts before frontend
