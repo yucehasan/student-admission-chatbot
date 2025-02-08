@@ -4,7 +4,6 @@ function App() {
   return (
     <div>
       <header>
-        <p>Welcome to chatbot app</p>
       </header>
       <body>
         <ChatScreen />
