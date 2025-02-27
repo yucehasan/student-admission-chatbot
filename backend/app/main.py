@@ -59,9 +59,9 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
             response = respond_to_message(data)
             # await manager.send_personal_message(f"You wrote: {data}", websocket)
             message = {"time":current_time,"clientId":"server","message": f"{response}"}
-            await manager.broadcast(json.dumps(message))
+            await manager.send_personal_message(json.dumps(message), websocket)
             
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         message = {"time":current_time,"clientId":client_id,"message":"Offline"}
-        await manager.broadcast(json.dumps(message))
+        await manager.send_personal_message(json.dumps(message), websocket)
