@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
-function ChatScreen() {
-  const [clientId, setClientId] = useState(
-    Math.floor(new Date().getTime() / 1000)
-  )
+const ChatScreen = () => {
+  const clientId = Math.floor(new Date().getTime() / 1000)
 
   const [websckt, setWebsckt] = useState<WebSocket | null>(null)
   const [message, setMessage] = useState<string>('')
@@ -24,9 +22,10 @@ function ChatScreen() {
 
     setWebsckt(ws)
     return () => ws.close()
-  }, [])
+  }, [clientId])
 
   const sendMessage = () => {
+    console.log('Sending message:', message)
     if (websckt) {
       websckt.send(message)
       setMessages((oldMessages) => [
@@ -135,4 +134,4 @@ function ChatScreen() {
   )
 }
 
-export { ChatScreen }
+export default ChatScreen
