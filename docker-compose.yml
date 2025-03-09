@@ -7,7 +7,9 @@ services:
       - ./backend:/app  # Mount local backend directory to container
     environment:
       - PYTHONUNBUFFERED=1  # Ensure output isn't buffered (important for logging)
-  
+    depends_on:
+      - db  # Ensure the database starts before the backend
+
   frontend:
     build: ./frontend
     ports:
@@ -19,3 +21,17 @@ services:
       - CHOKIDAR_USEPOLLING=true  # For hot-reloading in Docker
     depends_on:
       - backend  # Ensure backend starts before frontend
+
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"  # Map PostgreSQL port 5432 to host
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persist database data
+    environment:
+      - POSTGRES_DB=mydatabase  # Set the database name
+      - POSTGRES_USER=myuser  # Set the database user
+      - POSTGRES_PASSWORD=mypassword  # Set the database password
+
+volumes:
+  postgres_data:
