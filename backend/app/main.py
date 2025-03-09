@@ -63,5 +63,3 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
             
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        message = {"time":current_time,"clientId":client_id,"message":"Offline"}
-        await manager.send_personal_message(json.dumps(message), websocket)
