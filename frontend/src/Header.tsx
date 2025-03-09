@@ -69,7 +69,7 @@ const Header = (): React.ReactElement => {
         <ul style={styles.ul}>
           <NavItem href="/" text="Home" />
           <NavItem href="programs" text="Programs" />
-          <NavItem href="admissions" text="Campuses" />
+          <NavItem href="campuses" text="Campuses" />
         </ul>
       </nav>
     </header>

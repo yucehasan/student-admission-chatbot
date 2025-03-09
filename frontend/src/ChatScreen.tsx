@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 
 const ChatScreen = () => {
-  const clientId = Math.floor(new Date().getTime() / 1000)
+  const clientId = useMemo(() => Math.floor(new Date().getTime() / 1000), [])
 
   const [websckt, setWebsckt] = useState<WebSocket | null>(null)
   const [message, setMessage] = useState<string>('')
@@ -22,7 +22,7 @@ const ChatScreen = () => {
 
     setWebsckt(ws)
     return () => ws.close()
-  }, [clientId])
+  }, [])
 
   const sendMessage = () => {
     console.log('Sending message:', message)
