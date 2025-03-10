@@ -19,16 +19,6 @@ def respond_to_message(message):
     else:
         response = "I don't know yet"
     return response
-
-async def save_chat(session, chat_id, message, response):
-    statement = select(Chat).where(Chat.id == chat_id).limit(1)
-    chat = (await session.execute(statement)).scalars().first()
-    if chat:
-        if message and message != "Connect":
-            chat.messages += f"message: {message}\n"
-        if response:
-            chat.messages += f"response: {response}\n"
-        await session.commit()
     
 async def generate_uuid(session):
     id = str(uuid.uuid4())
@@ -51,18 +41,21 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
     uid = await generate_uuid(session)
     chat = Chat(id=uid, messages="")
     session.add(chat)
-    await session.commit()
     now = datetime.now()
     current_time = now.strftime("%H:%M")
     try:
         while True:
             message = await websocket.receive_text()
             response = respond_to_message(message)
-            res_obj = {"time": current_time, "clientId": "server", "message": f"{response}"}
+            res_obj = {"time": current_time, "clientId": "server", "message": f"{response}", "chatId": uid}
             await manager.send_personal_message(json.dumps(res_obj), websocket)
-            await save_chat(session, uid, message, response)
+            if message and message != "Connect":
+                chat.messages += f"message: {message}\n"
+            if response:
+                chat.messages += f"response: {response}\n"
             
     except WebSocketDisconnect:
+        await session.commit()
         manager.disconnect(websocket)
         
 @router.get('/campuses')
