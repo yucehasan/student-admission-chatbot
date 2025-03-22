@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import PreviousChats, { ChatHistory } from './PreviousChats.tsx'
 
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
@@ -71,7 +70,6 @@ const ChatScreen = () => {
   const [websckt, setWebsckt] = useState<WebSocket | null>(null)
   const [message, setMessage] = useState<string>('')
   const [messages, setMessages] = useState<Array<any>>([])
-  const [prevChats, setPrevChats] = useState<ChatHistory>([])
 
   useEffect(() => {
     const url = 'ws://0.0.0.0:3004/ws/' + clientId
@@ -92,28 +90,6 @@ const ChatScreen = () => {
     }
   }, [])
 
-  useEffect(() => {
-    const lsPrevChatStr = localStorage.getItem('chats')
-    const lsPrevChats = lsPrevChatStr ? JSON.parse(lsPrevChatStr) : {}
-    setPrevChats(Object.values(lsPrevChats))
-
-    return () => {
-      if (messages.length > 2) {
-        const connectMessage = messages[0]
-        const firstMessage = messages[1]
-        const uid = connectMessage.chatId
-        const lsPrevChatStr = localStorage.getItem('chats')
-        const lsPrevChats = lsPrevChatStr ? JSON.parse(lsPrevChatStr) : {}
-        lsPrevChats[uid] = {
-          thumbnail: firstMessage.message.substring(0, 10),
-          chat: messages,
-          uid: uid
-        }
-        localStorage.setItem('chats', JSON.stringify(lsPrevChats))
-      }
-    }
-  }, [messages])
-
   const sendMessage = () => {
     console.log('Sending message:', message)
     if (websckt) {
@@ -128,7 +104,6 @@ const ChatScreen = () => {
 
   return (
     <div style={styles.container}>
-      <PreviousChats chats={prevChats} />
       <h1>Conestoga College Student Chatbot</h1>
       <div style={styles.chatBox}>
         {messages.map((value, index) => (

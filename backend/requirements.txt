@@ -1,6 +1,5 @@
 fastapi
 uvicorn
 python-socketio
-sqlalchemy
 asyncpg
 requests

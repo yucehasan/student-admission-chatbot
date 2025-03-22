@@ -68,8 +68,6 @@ const Header = (): React.ReactElement => {
       <nav className="nav">
         <ul style={styles.ul}>
           <NavItem href="/" text="Home" />
-          <NavItem href="programs" text="Programs" />
-          <NavItem href="campuses" text="Campuses" />
         </ul>
       </nav>
     </header>
