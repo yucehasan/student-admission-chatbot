@@ -33,7 +33,7 @@ resource "aws_ecs_task_definition" "ecs_fe_task_definition" {
   family             = "my-ecs-task-frontend"
   network_mode       = "awsvpc"
   execution_role_arn = "arn:aws:iam::961889141255:role/ecsTaskExecutionRole"
-  cpu                = 384
+  cpu                = 512
   runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
@@ -42,8 +42,8 @@ resource "aws_ecs_task_definition" "ecs_fe_task_definition" {
     {
       name      = "dockergs"
       image     = "961889141255.dkr.ecr.us-east-1.amazonaws.com/student-chatbot/frontend:latest"
-      cpu       = 384
-      memory    = 400
+      cpu       = 512
+      memory    = 800
       essential = true
       portMappings = [
         {
@@ -95,7 +95,7 @@ resource "aws_ecs_task_definition" "ecs_be_task_definition" {
   family             = "my-ecs-task-backend"
   network_mode       = "awsvpc"
   execution_role_arn = "arn:aws:iam::961889141255:role/ecsTaskExecutionRole"
-  cpu                = 384
+  cpu                = 512
   runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
@@ -104,8 +104,8 @@ resource "aws_ecs_task_definition" "ecs_be_task_definition" {
     {
       name      = "backend-container"
       image     = "961889141255.dkr.ecr.us-east-1.amazonaws.com/student-chatbot/backend:latest"
-      cpu       = 384
-      memory    = 400
+      cpu       = 512
+      memory    = 800
       essential = true
       portMappings = [
         {
