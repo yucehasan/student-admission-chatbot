@@ -1,3 +1,4 @@
+import AlternateChatScreen from './AlternateChatScreen.tsx';
 import ChatScreen from './ChatScreen.tsx'
 import Header from './Header.tsx'
 import Home from './Home.tsx'
@@ -11,6 +12,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/chat" element={<ChatScreen />} />
+      <Route path="/chat-api" element={<AlternateChatScreen />} />
       <Route path="*" element={<Home />} />
     </Routes>
   </BrowserRouter>
