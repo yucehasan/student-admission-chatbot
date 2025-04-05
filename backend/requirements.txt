@@ -1,5 +1,5 @@
 fastapi
 uvicorn
-python-socketio
 asyncpg
 requests
+pydantic

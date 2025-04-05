@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, use } from 'react'
+import ReactMarkdown from 'react-markdown'
 
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
@@ -25,10 +26,11 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   message: {
     borderRadius: '8px',
-    padding: '10px',
+    padding: '0 10px',
     margin: '5px 0',
     maxWidth: '70%',
-    wordWrap: 'break-word'
+    wordWrap: 'break-word',
+    minWidth: '30px'
   },
   myMessage: {
     backgroundColor: '#d1f7d1',
@@ -67,40 +69,90 @@ const styles: { [key: string]: React.CSSProperties } = {
 const ChatScreen = () => {
   const clientId = useMemo(() => Math.floor(new Date().getTime() / 1000), [])
 
-  const [websckt, setWebsckt] = useState<WebSocket | null>(null)
   const [message, setMessage] = useState<string>('')
   const [messages, setMessages] = useState<Array<any>>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isQuerying, setIsQuerying] = useState<boolean>(false)
 
-  useEffect(() => {
-    const url = 'ws://0.0.0.0:3004/ws/' + clientId
-    const ws = new WebSocket(url)
-    ws.onopen = (event) => {
-      ws.send('Connect')
-    }
+  const url = 'http://0.0.0.0:3004/'
 
-    ws.onmessage = (e) => {
-      const newMessage = JSON.parse(e.data)
-      setMessages((messages) => [...messages, newMessage])
-    }
+  const addWaitingMessage = () => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { clientId: 1, message: 'Awaiting response...' }
+    ])
+  }
 
-    setWebsckt(ws)
+  const removeWaitingMessage = () => {
+    setMessages((prevMessages) =>
+      prevMessages.filter((message) => message.clientId !== 1)
+    )
+  }
 
-    return () => {
-      ws.close()
-    }
-  }, [])
+  const addErrorMessage = () => {
+    removeWaitingMessage()
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        clientId: 1,
+        message: 'Error occurred in the system. Refresh the page and try again'
+      }
+    ])
+  }
 
   const sendMessage = () => {
-    console.log('Sending message:', message)
-    if (websckt) {
-      websckt.send(message)
-      setMessages((oldMessages) => [
-        ...oldMessages,
-        { clientId: clientId, message: message }
-      ])
+    if (message.trim() === '') {
+      return
     }
+    // Send request to url defined above
+    setMessages((prevMessages) => [...prevMessages, { clientId, message }])
+    setIsQuerying(true)
+    fetch(url + 'chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message })
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setIsQuerying(false)
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { clientId: 0, message: data.message }
+        ])
+      })
+      .catch((error) => {
+        addErrorMessage()
+        console.error('Error:', error)
+      })
     setMessage('')
   }
+  const healthCheck = () => {
+    fetch(url)
+      .then((response) => response.status)
+      .then((status) => {
+        if (status === 200) {
+          console.log('Server is healthy')
+          setIsLoading(false)
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
+  }
+
+  useEffect(() => {
+    healthCheck()
+  }, [])
+
+  useEffect(() => {
+    if (isQuerying) {
+      addWaitingMessage()
+    } else {
+      removeWaitingMessage()
+    }
+  }, [isQuerying])
 
   return (
     <div style={styles.container}>
@@ -116,7 +168,7 @@ const ChatScreen = () => {
                 : styles.otherMessage)
             }}
           >
-            <p>{value.message}</p>
+            <ReactMarkdown>{value.message}</ReactMarkdown>
           </div>
         ))}
       </div>
@@ -128,8 +180,12 @@ const ChatScreen = () => {
           onChange={(e) => setMessage(e.target.value)}
           value={message}
         />
-        <button style={styles.sendButton} onClick={sendMessage}>
-          Send
+        <button
+          style={styles.sendButton}
+          disabled={isLoading}
+          onClick={sendMessage}
+        >
+          {isLoading ? 'Connecting...' : 'Send'}
         </button>
       </div>
     </div>
