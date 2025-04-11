@@ -23,8 +23,8 @@ resource "aws_appautoscaling_policy" "frontend_scale_out_policy" {
 }
 
 resource "aws_appautoscaling_target" "ecs_backend_service_target" {
-  max_capacity       = 10 # Maximum number of tasks
-  min_capacity       = 1  # Minimum number of tasks
+  max_capacity       = 3 # Maximum number of tasks
+  min_capacity       = 1 # Minimum number of tasks
   resource_id        = "service/${aws_ecs_cluster.ecs_cluster.name}/${aws_ecs_service.ecs_service_backend.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
