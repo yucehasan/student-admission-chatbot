@@ -14,15 +14,15 @@ app.add_middleware(
 )
 
 @app.get("/")
-def Home():
+async def Home():
     return "Welcome home"
 
 @app.get("/api/healthcheck")
-def Health():
+async def Health():
     return "system is up and running"
 
 @app.get("/api/load_test")
-def Test():
+async def Test():
     time.sleep(5) # simulate a long-running process
     return "Successful query execution"
 
