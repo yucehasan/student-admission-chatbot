@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, use } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 const styles: { [key: string]: React.CSSProperties } = {
@@ -73,8 +73,7 @@ const ChatScreen = () => {
   const [messages, setMessages] = useState<Array<any>>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isQuerying, setIsQuerying] = useState<boolean>(false)
-
-  const url = 'http://0.0.0.0:3004/'
+  const [url, _] = useState<string>(process.env.REACT_APP_API_URL || '')
 
   const addWaitingMessage = () => {
     setMessages((prevMessages) => [
@@ -107,7 +106,7 @@ const ChatScreen = () => {
     // Send request to url defined above
     setMessages((prevMessages) => [...prevMessages, { clientId, message }])
     setIsQuerying(true)
-    fetch(url + 'chat', {
+    fetch(url + '/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -128,23 +127,23 @@ const ChatScreen = () => {
       })
     setMessage('')
   }
-  const healthCheck = () => {
-    fetch(url)
-      .then((response) => response.status)
-      .then((status) => {
-        if (status === 200) {
-          console.log('Server is healthy')
-          setIsLoading(false)
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error)
-      })
-  }
 
   useEffect(() => {
+    const healthCheck = () => {
+      fetch(url)
+        .then((response) => response.status)
+        .then((status) => {
+          if (status === 200) {
+            console.log('Server is healthy')
+            setIsLoading(false)
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+        })
+    }
     healthCheck()
-  }, [])
+  }, [url])
 
   useEffect(() => {
     if (isQuerying) {

@@ -1,10 +1,12 @@
 from fastapi import APIRouter
 import requests
 from pydantic import BaseModel
-
-
+import os
 
 router = APIRouter()
+api_url = os.getenv("API_URL")
+api_key = os.getenv("API_KEY")
+
 
 class ChatMessage(BaseModel):
     message: str
@@ -15,10 +17,10 @@ def respond_to_message(message):
         response = "Hello, how can I help you?"
     else:
         # API endpoint
-        url = "https://pdf.ai/api/v1/chat-all"
+        url = api_url + "/chat-all"
         # Headers
         headers = {
-            "X-API-Key": API_KEY,
+            "X-API-Key": api_key,
             "Content-Type": "application/json"
         }
         # Request body
