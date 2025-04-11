@@ -22,7 +22,7 @@ async def Health():
     return "system is up and running"
 
 @app.get("/api/load_test")
-async def Test():
+def Test():
     time.sleep(5) # simulate a long-running process
     return "Successful query execution"
 

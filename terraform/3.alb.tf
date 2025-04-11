@@ -43,7 +43,7 @@ resource "aws_security_group" "alb_sg_private" {
     from_port       = 80
     to_port         = 80
     protocol        = "tcp"
-    security_groups = [aws_security_group.ecs_sg_public.id, aws_security_group.alb_sg_public.id]
+    security_groups = [aws_security_group.ecs_sg_public.id]
     description     = "Allow traffic from public ECS instances"
   }
 
