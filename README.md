@@ -38,9 +38,9 @@ Before starting, ensure that you have the following installed:
     cd frontend/
    ```
 
-6. **Update parameters in ```deploy.sh``` with the correct values:**
+6. **Update parameters in ```nginx.conf``` with the correct values:**
    ```bash
-    nano deploy.sh
+    nano nginx.conf
    ```
 
 7. **Run deploy.sh**:
@@ -50,7 +50,7 @@ Before starting, ensure that you have the following installed:
 
 8. **Navigate to the terraform folder:**
    ```bash
-    cd backend/
+    cd terraform/
    ```
 
 9. **Plan and apply changes:**
