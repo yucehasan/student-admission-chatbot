@@ -13,12 +13,6 @@ Before starting, ensure that you have the following installed:
 
 ## Steps
 
-### 1. Build and Push Backend Docker Image
-
-The backend Docker image is built using the Dockerfile located in the `backend/` folder.
-
-#### Steps:
-
 1. **Configure AWS CLI:**
    ```bash
     aws configure
