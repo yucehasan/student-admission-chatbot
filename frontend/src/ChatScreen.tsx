@@ -73,7 +73,7 @@ const ChatScreen = () => {
   const [messages, setMessages] = useState<Array<any>>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isQuerying, setIsQuerying] = useState<boolean>(false)
-  const [url, _] = useState<string>(process.env.REACT_APP_API_URL || '')
+  const [url, _] = useState<string>('/api/')
 
   const addWaitingMessage = () => {
     setMessages((prevMessages) => [
@@ -106,7 +106,7 @@ const ChatScreen = () => {
     // Send request to url defined above
     setMessages((prevMessages) => [...prevMessages, { clientId, message }])
     setIsQuerying(true)
-    fetch(url + '/chat', {
+    fetch(url + 'chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -130,7 +130,7 @@ const ChatScreen = () => {
 
   useEffect(() => {
     const healthCheck = () => {
-      fetch(url)
+      fetch(url + 'healthcheck')
         .then((response) => response.status)
         .then((status) => {
           if (status === 200) {

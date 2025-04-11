@@ -16,4 +16,8 @@ app.add_middleware(
 def Home():
     return "Welcome home"
 
+@app.get("/api/healthcheck")
+def Home():
+    return "system is up and running"
+
 app.include_router(api_router)

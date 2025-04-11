@@ -39,7 +39,7 @@ def respond_to_message(message):
         
     return response
 
-@router.post("/chat")
+@router.post("/api/chat")
 async def respond_to_chat(chat: ChatMessage):
     message = respond_to_message(chat.message)
     return {"status": "ok", "message": message}
