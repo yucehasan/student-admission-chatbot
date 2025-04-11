@@ -10,7 +10,7 @@ resource "aws_ecs_capacity_provider" "ecs_capacity_provider_public" {
       maximum_scaling_step_size = 1
       minimum_scaling_step_size = 1
       status                    = "ENABLED"
-      target_capacity           = 1
+      target_capacity           = 2
     }
   }
 }
@@ -24,7 +24,7 @@ resource "aws_ecs_capacity_provider" "ecs_capacity_provider_private" {
       maximum_scaling_step_size = 1
       minimum_scaling_step_size = 1
       status                    = "ENABLED"
-      target_capacity           = 1
+      target_capacity           = 2
     }
   }
 }
@@ -69,7 +69,7 @@ resource "aws_ecs_service" "ecs_service_frontend" {
   name            = "ecs-service-frontend"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_frontend_task_definition.arn
-  desired_count   = 1
+  desired_count   = 0
 
   network_configuration {
     subnets         = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
@@ -131,7 +131,7 @@ resource "aws_ecs_service" "ecs_service_backend" {
   name            = "ecs-service-backend"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_backend_task_definition.arn
-  desired_count   = 1
+  desired_count   = 0
 
   network_configuration {
     subnets         = [aws_subnet.private_subnet_1.id, aws_subnet.private_subnet_2.id]

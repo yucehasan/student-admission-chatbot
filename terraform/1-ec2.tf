@@ -26,7 +26,7 @@ resource "aws_security_group" "ecs_sg_public" {
 resource "aws_launch_template" "ecs_lt_public" {
   name          = "ecs-template-public"
   image_id      = "ami-0d93cbafdab575cee"
-  instance_type = "t2.medium"
+  instance_type = "t2.small"
 
   key_name               = "ec2ecsglog"
   vpc_security_group_ids = [aws_security_group.ecs_sg_public.id]
@@ -80,7 +80,7 @@ resource "aws_security_group" "ecs_sg_private" {
 resource "aws_launch_template" "ecs_lt_private" {
   name          = "ecs-template-private"
   image_id      = "ami-0d93cbafdab575cee"
-  instance_type = "t2.medium"
+  instance_type = "t2.small"
 
   key_name               = "ec2ecsglog"
   vpc_security_group_ids = [aws_security_group.ecs_sg_private.id]

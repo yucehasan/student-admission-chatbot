@@ -4,8 +4,8 @@ resource "aws_autoscaling_group" "ecs_asg_public" {
     aws_subnet.public_subnet_2.id
   ]
 
-  desired_capacity = 2
-  max_size         = 3
+  desired_capacity = 1
+  max_size         = 2
   min_size         = 1
 
   launch_template {
@@ -36,8 +36,8 @@ resource "aws_autoscaling_group" "ecs_asg_private" {
     aws_subnet.private_subnet_2.id
   ]
 
-  desired_capacity = 2
-  max_size         = 3
+  desired_capacity = 1
+  max_size         = 2
   min_size         = 1
 
   launch_template {
