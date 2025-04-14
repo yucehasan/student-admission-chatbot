@@ -1,3 +1,7 @@
+# What is Condor Bot
+
+The Chatbot System provides students with an effective interface to obtain academic program instructions and campus-related information, and other relevant topics. The system development focuses on creating a chatbot system which runs on AWS cloud platform powered through a third-party API. Students can use the web application of the Student Interface to perform queries about various college matters while the chatbot obtains responses directly from websites to deliver answers.
+
 # Project Deployment Guide
 
 This guide explains the steps required to build and deploy the Docker images for the backend and frontend, as well as deploying AWS infrastructure using Terraform.
